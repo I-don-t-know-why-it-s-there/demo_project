@@ -1,16 +1,12 @@
-# .github/workflows/create-issue-branch.yml
+name: Create Issue Branch
 
 on:
-  # The issues event below is only needed for the default (auto) mode,
-  # you can remove it otherwise
   issues:
-    types: [ assigned ]
-  # The issue_comment event below is only needed for the ChatOps mode,
-  # you can remove it otherwise
+    types: [assigned]
   issue_comment:
-    types: [ created ]
+    types: [created]
   pull_request:
-    types: [ closed ]
+    types: [closed]
 
 jobs:
   create_issue_branch_job:
