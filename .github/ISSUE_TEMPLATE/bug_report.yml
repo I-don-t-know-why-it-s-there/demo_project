@@ -1,0 +1,18 @@
+name: 🐛 Bug Report
+description: 버그를 발견했을 때 사용하세요.
+title: "[Bug] "
+labels: ["bug"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: "## 버그 설명"
+  - type: input
+    id: bug-description
+    attributes:
+      label: 어떤 버그인가요?
+      placeholder: 버그 내용을 입력하세요.
+    validations:
+      required: true
+
