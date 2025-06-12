@@ -1,0 +1,38 @@
+name: ✨ 기능 추가 요청
+description: 새로운 기능을 제안할 때 선택하세요.
+title: "[Feature] "
+labels: ["enhancement"]
+assignees: []
+
+body:
+  - type: input
+    id: feature-name
+    attributes:
+      label: 기능 이름
+      placeholder: 예: 사용자 프로필 편집 기능
+    validations:
+      required: true
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: 어떤 기능인가요?
+      placeholder: 어떤 문제를 해결하는 기능인지 구체적으로 작성해주세요
+    validations:
+      required: true
+
+  - type: input
+    id: branch-name
+    attributes:
+      label: 브랜치 이름 (자동 생성될 예정입니다)
+      placeholder: 예: `feature/profile-edit`
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: 체크리스트
+      options:
+        - label: [ ] 관련 문서를 확인했습니다.
+        - label: [ ] 팀과 기능 설계에 대해 논의했습니다.
