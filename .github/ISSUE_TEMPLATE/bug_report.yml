@@ -1,5 +1,5 @@
-name: 🐛 Bug Report
-description: 버그를 발견했을 때 사용하세요.
+name: 🐞 Bug Report
+description: 버그를 신고하고 싶을 때 선택하세요.
 title: "[Bug] "
 labels: ["bug"]
 assignees: []
@@ -7,12 +7,39 @@ assignees: []
 body:
   - type: markdown
     attributes:
-      value: "## 버그 설명"
-  - type: input
+      value: |
+        ## 🐛 버그 설명
+        문제를 명확하고 간결하게 설명해주세요.
+  - type: textarea
     id: bug-description
     attributes:
-      label: 어떤 버그인가요?
-      placeholder: 버그 내용을 입력하세요.
+      label: 어떤 문제가 있었나요?
+      placeholder: 예: 로그인 버튼을 눌러도 동작하지 않음
     validations:
       required: true
 
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: 재현 방법
+      description: 버그를 어떻게 재현할 수 있는지 단계별로 적어주세요.
+      placeholder: |
+        1. 페이지 열기
+        2. 버튼 클릭
+        3. 오류 발생
+    validations:
+      required: false
+
+  - type: input
+    id: environment
+    attributes:
+      label: 사용 환경
+      placeholder: 예: Chrome 124 / Windows 11
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: 체크리스트
+      options:
+        - label: [ ] 이 버그가 최신 버전에서 발생한 것이 맞습니다.
+        - label: [ ] 이슈 중복 여부를 확인했습니다.
