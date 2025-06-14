@@ -1,6 +1,6 @@
 package com.example.demo.global.enums;
 
-import com.example.taskproject.common.exception.CustomException;
+import com.example.demo.global.exception.CustomException;
 
 import java.util.Arrays;
 import java.util.function.Function;

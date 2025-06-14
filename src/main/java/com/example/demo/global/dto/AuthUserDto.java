@@ -1,6 +1,6 @@
 package com.example.demo.global.dto;
 
-import com.example.taskproject.common.enums.UserRole;
+import com.example.demo.global.enums.UserRole;
 import lombok.Getter;
 
 @Getter
