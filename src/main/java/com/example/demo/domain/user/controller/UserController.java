@@ -7,8 +7,6 @@ import com.example.demo.global.dto.AuthUserDto;
 import com.example.demo.global.enums.UserRole;
 import com.example.demo.global.util.CustomMapper;
 import jakarta.validation.Valid;
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
