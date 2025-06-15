@@ -7,4 +7,6 @@ public class Const {
     public static final String USER_CREATE_URL = USER_BASE_URL + "/create";
     public static final String USER_LOGIN_URL = USER_BASE_URL + "/login";
     public static final String USER_UPDATE_URL = USER_BASE_URL + "/update";
+    public static final String USER_FIND_URL = USER_BASE_URL + "/info";
+    public static final String USER_DELETE_URL = USER_BASE_URL + "/delete";
 }

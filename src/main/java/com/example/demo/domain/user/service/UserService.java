@@ -64,6 +64,13 @@ public class UserService {
         return CustomMapper.toDto(user, LoginUserResponseDto.class);
     }
 
+    @Transactional(readOnly = true)
+    public FindUserResponseDto getUser(AuthUserDto userDto) {
+        User user = userRepository.findById(userDto.getId())
+                .orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_EXIST));
+        return CustomMapper.toDto(user, FindUserResponseDto.class);
+    }
+
     @Transactional
     public UpdateUserResponseDto updateUser(UpdateUserRequestDto requestDto, AuthUserDto userDto) {
         long result = userRepository.updateUser(requestDto, userDto);

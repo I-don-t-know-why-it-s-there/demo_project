@@ -7,6 +7,7 @@ import com.example.demo.global.dto.AuthUserDto;
 import com.example.demo.global.enums.UserRole;
 import com.example.demo.global.util.CustomMapper;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,13 @@ public class UserController {
     ) {
         LoginUserResponseDto loginUserResponseDto = userService.loginUser(requestDto);
         return CustomMapper.responseEntity(loginUserResponseDto, HttpStatus.OK, true);
+    }
+
+    @GetMapping(Const.USER_FIND_URL)
+    public ResponseEntity<Map<String, Object>> findUser() {
+        AuthUserDto userDto = new AuthUserDto(1L, "test@test.com", UserRole.USER);
+        FindUserResponseDto user = userService.getUser(userDto);
+        return CustomMapper.responseEntity(user, HttpStatus.OK, true);
     }
 
     @PatchMapping(Const.USER_UPDATE_URL)
