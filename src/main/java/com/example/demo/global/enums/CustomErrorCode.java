@@ -15,6 +15,8 @@ public enum CustomErrorCode {
     EMAIL_NOT_EXIST(HttpStatus.BAD_REQUEST, "존재하지 않는 이메일입니다."),
     PASSWORD_WRONG(HttpStatus.BAD_REQUEST, "비밀번호가 틀렸습니다."),
 
+    CANNOT_CHANGE_VALUE(HttpStatus.BAD_REQUEST, "변경할 수 없는 정보가 포함되어 있습니다."),
+
     SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "이상해씨");
 
     private final HttpStatus httpStatus;

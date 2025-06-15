@@ -1,19 +1,19 @@
 package com.example.demo.domain.user.service;
 
-import com.example.demo.domain.user.domain.dto.CreateUserRequestDto;
-import com.example.demo.domain.user.domain.dto.CreateUserResponseDto;
-import com.example.demo.domain.user.domain.dto.LoginUserRequestDto;
-import com.example.demo.domain.user.domain.dto.LoginUserResponseDto;
+import com.example.demo.domain.user.domain.dto.*;
 import com.example.demo.domain.user.domain.model.User;
 import com.example.demo.domain.user.domain.repository.UserRepository;
+import com.example.demo.global.dto.AuthUserDto;
 import com.example.demo.global.enums.CustomErrorCode;
 import com.example.demo.global.exception.CustomException;
 import com.example.demo.global.util.CustomMapper;
 import com.example.demo.global.util.PasswordEncoder;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -62,5 +62,19 @@ public class UserService {
         }
 
         return CustomMapper.toDto(user, LoginUserResponseDto.class);
+    }
+
+    @Transactional
+    public UpdateUserResponseDto updateUser(UpdateUserRequestDto requestDto, AuthUserDto userDto) {
+        long result = userRepository.updateUser(requestDto, userDto);
+        if (result == 0) {
+            throw new CustomException(CustomErrorCode.INVALID_REQUEST, "업데이트가 적용된 데이터가 없습니다.");
+        } else if (result > 1) {
+            throw new CustomException(CustomErrorCode.INVALID_REQUEST, "업데이트가 적용된 데이터가 너무 많습니다.");
+        }
+        User user = userRepository.findByEmail(userDto.getEmail())
+                .orElseThrow(() -> new CustomException(CustomErrorCode.EMAIL_NOT_EXIST));
+
+        return CustomMapper.toDto(user, UpdateUserResponseDto.class);
     }
 }
