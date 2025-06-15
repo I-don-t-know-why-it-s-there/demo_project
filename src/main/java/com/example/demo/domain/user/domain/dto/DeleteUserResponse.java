@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public class DeleteUserResponse {
 
-    private String username;
+    private final String username;
 
     public DeleteUserResponse(User user) {
         this.username = user.getUsername();

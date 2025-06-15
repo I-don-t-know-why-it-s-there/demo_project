@@ -1,9 +1,6 @@
 package com.example.demo.domain.user.domain.dto;
 
 import jakarta.validation.constraints.AssertFalse;
-import jakarta.validation.constraints.AssertTrue;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 import java.util.Map;
@@ -17,6 +14,6 @@ public class UpdateUserRequestDto {
 
     @AssertFalse(message = UPDATE)
     public boolean isValidUpdateMap() {
-        return this.updateMap.isEmpty();
+        return this.updateMap == null || this.updateMap.isEmpty();
     }
 }

@@ -2,26 +2,23 @@ package com.example.demo.domain.user.domain.dto;
 
 import com.example.demo.domain.user.domain.model.User;
 import com.example.demo.global.enums.UserRole;
-import jakarta.persistence.Column;
 import lombok.Getter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
 @Getter
 public class FindUserResponseDto {
-    private Long userId;
+    private final Long userId;
 
-    private String email;
+    private final String email;
 
-    private String username;
+    private final String username;
 
-    private UserRole role;
+    private final UserRole role;
 
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt;
 
-    private LocalDateTime modifiedAt;
+    private final LocalDateTime modifiedAt;
 
 
     public FindUserResponseDto(User user) {
