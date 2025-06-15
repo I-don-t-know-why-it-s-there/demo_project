@@ -2,7 +2,6 @@ package com.example.demo.domain.user.domain.model;
 
 import com.example.demo.global.enums.UserRole;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.Getter;
 
 @Entity
@@ -27,4 +26,6 @@ public class User {
         this.username = username;
         this.role = role;
     }
+
+    public User() {}
 }

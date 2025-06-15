@@ -2,6 +2,8 @@ package com.example.demo.domain.user.controller;
 
 import com.example.demo.domain.user.domain.dto.CreateUserRequestDto;
 import com.example.demo.domain.user.domain.dto.CreateUserResponseDto;
+import com.example.demo.domain.user.domain.dto.LoginUserRequestDto;
+import com.example.demo.domain.user.domain.dto.LoginUserResponseDto;
 import com.example.demo.domain.user.service.UserService;
 import com.example.demo.global.constant.Const;
 import com.example.demo.global.util.CustomMapper;
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping(Const.USER_BASE_URL)
+@RequestMapping
 public class UserController {
 
     public final UserService userService;
@@ -30,5 +32,13 @@ public class UserController {
     ) {
         CreateUserResponseDto responseDto = userService.createUser(requestDto);
         return CustomMapper.responseEntity(responseDto, HttpStatus.CREATED, true);
+    }
+
+    @PostMapping(Const.USER_LOGIN_URL)
+    public ResponseEntity<Map<String, Object>> login(
+            @RequestBody LoginUserRequestDto requestDto
+    ) {
+        LoginUserResponseDto loginUserResponseDto = userService.loginUser(requestDto);
+        return CustomMapper.responseEntity(loginUserResponseDto, HttpStatus.OK, true);
     }
 }
