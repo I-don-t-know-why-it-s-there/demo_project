@@ -9,6 +9,7 @@ import com.example.demo.global.util.PasswordEncoder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Objects;
 
@@ -57,6 +58,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
             }
         }
 
+        jpaUpdateClause.set(qUser.modifiedAt, LocalDateTime.now());
         return jpaUpdateClause.execute();
     }
 }
