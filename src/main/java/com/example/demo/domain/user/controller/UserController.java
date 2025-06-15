@@ -33,27 +33,40 @@ public class UserController {
         return CustomMapper.responseEntity(responseDto, HttpStatus.CREATED, true);
     }
 
+    //TODO 인증 인가 구현 후 키 생성 필요
     @PostMapping(Const.USER_LOGIN_URL)
     public ResponseEntity<Map<String, Object>> login(
             @Valid @RequestBody LoginUserRequestDto requestDto
     ) {
-        LoginUserResponseDto loginUserResponseDto = userService.loginUser(requestDto);
-        return CustomMapper.responseEntity(loginUserResponseDto, HttpStatus.OK, true);
+        LoginUserResponseDto responseDto = userService.loginUser(requestDto);
+        return CustomMapper.responseEntity(responseDto, HttpStatus.OK, true);
     }
 
+    //TODO 인증 인가 구현 후 AuthUserDto 객체 인증객체로 변경 필요
     @GetMapping(Const.USER_FIND_URL)
     public ResponseEntity<Map<String, Object>> findUser() {
         AuthUserDto userDto = new AuthUserDto(1L, "test@test.com", UserRole.USER);
-        FindUserResponseDto user = userService.getUser(userDto);
-        return CustomMapper.responseEntity(user, HttpStatus.OK, true);
+        FindUserResponseDto responseDto = userService.getUser(userDto);
+        return CustomMapper.responseEntity(responseDto, HttpStatus.OK, true);
     }
 
+    //TODO 인증 인가 구현 후 AuthUserDto 객체 인증객체로 변경 필요
     @PatchMapping(Const.USER_UPDATE_URL)
     public ResponseEntity<Map<String, Object>> updateUser(
             @Valid @RequestBody UpdateUserRequestDto requestDto
     ) {
         AuthUserDto userDto = new AuthUserDto(1L, "test@test.com", UserRole.USER);
-        UpdateUserResponseDto updateUserResponseDto = userService.updateUser(requestDto, userDto);
-        return CustomMapper.responseEntity(updateUserResponseDto, HttpStatus.OK, true);
+        UpdateUserResponseDto responseDto = userService.updateUser(requestDto, userDto);
+        return CustomMapper.responseEntity(responseDto, HttpStatus.OK, true);
+    }
+
+    //TODO 인증 인가 구현 후 AuthUserDto 객체 인증객체로 변경 필요
+    @DeleteMapping(Const.USER_DELETE_URL)
+    public ResponseEntity<Map<String, Object>> deleteUser(
+            @Valid @RequestBody DeleteUserRequest requestDto
+    ) {
+        AuthUserDto userDto = new AuthUserDto(1L, "test@test.com", UserRole.USER);
+        DeleteUserResponse responseDto = userService.deleteUser(requestDto, userDto);
+        return CustomMapper.responseEntity(responseDto, HttpStatus.OK, true);
     }
 }
