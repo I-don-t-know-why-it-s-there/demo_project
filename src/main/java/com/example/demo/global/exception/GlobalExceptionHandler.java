@@ -18,8 +18,8 @@ public class GlobalExceptionHandler {
         CustomErrorCode errorCode = e.getErrorCode();
 
         CustomErrorResponseDto errorResponseDto = new CustomErrorResponseDto(errorCode.name(),e.getMessage());
-
-        return CustomMapper.responseEntity(errorResponseDto, errorCode.getHttpStatus(), false);
+        Map<String, Object> stringObjectMap = CustomMapper.responseEntity(errorResponseDto, false);
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(stringObjectMap);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -29,6 +29,7 @@ public class GlobalExceptionHandler {
 
         CustomErrorResponseDto errorResponseDto = new CustomErrorResponseDto(errorCode.name(), message);
 
-        return CustomMapper.responseEntity(errorResponseDto, errorCode.getHttpStatus(), false);
+        Map<String, Object> stringObjectMap = CustomMapper.responseEntity(errorResponseDto, false);
+        return ResponseEntity.status(errorCode.getHttpStatus()).body(stringObjectMap);
     }
 }

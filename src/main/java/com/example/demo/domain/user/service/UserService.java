@@ -7,6 +7,7 @@ import com.example.demo.global.dto.AuthUserDto;
 import com.example.demo.global.enums.CustomErrorCode;
 import com.example.demo.global.exception.CustomException;
 import com.example.demo.global.util.CustomMapper;
+import com.example.demo.global.util.JwtUtil;
 import com.example.demo.global.util.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
 
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
