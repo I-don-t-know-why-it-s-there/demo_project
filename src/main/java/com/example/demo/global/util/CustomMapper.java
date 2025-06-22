@@ -1,5 +1,6 @@
 package com.example.demo.global.util;
 
+import com.example.demo.domain.user.domain.dto.LoginUserRequestDto;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
@@ -10,13 +11,13 @@ import java.util.Map;
 public class CustomMapper {
     private CustomMapper() {}
 
-    public static <T> ResponseEntity<Map<String, Object>> responseEntity(T body, HttpStatusCode status, boolean flag) {
+    public static <T> Map<String, Object> responseEntity(T body, boolean flag) {
         Map<String,Object> map = new HashMap<>();
         map.put("success", flag);
         map.put("message", flag ? "성공" : "실패");
         map.put("data",body);
         map.put("timestamp", LocalDateTime.now());
-        return ResponseEntity.status(status).body(map);
+        return map;
     }
 
     public static <T, U> T toDto(U entity, Class<T> dtoClass) {
