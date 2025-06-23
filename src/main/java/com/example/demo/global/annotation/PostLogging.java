@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UserLogging {
+public @interface PostLogging {
     String value() default "No description";
-    String serviceType() default "USER";  // 서비스 타입 구분
-}
+    String serviceType() default "POST";  // 서비스 타입 구분
+} 
