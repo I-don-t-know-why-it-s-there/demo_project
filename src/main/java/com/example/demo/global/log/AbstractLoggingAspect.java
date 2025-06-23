@@ -1,27 +1,24 @@
 package com.example.demo.global.log;
 
+import com.example.demo.global.annotation.UserLogging;
+import com.example.demo.global.annotation.PostLogging;
 import com.example.demo.global.model.LogEntity;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.event.Level;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
-@Aspect
-@Component
 public abstract class AbstractLoggingAspect {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Around("@annotation(com.example.demo.global.annotation.UserLogging)")
-    public final Object userLogger(ProceedingJoinPoint joinPoint) throws Throwable {
+    public final Object executeLogging(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
         Class<?> targetClass = joinPoint.getTarget().getClass();
@@ -30,17 +27,20 @@ public abstract class AbstractLoggingAspect {
         Object[] args = joinPoint.getArgs();
         long startTime = System.currentTimeMillis();
 
-        String requestId = extractEntityId(targetClass, method, args, null, "request");
-        Level requestLogLevel = getLogLevel(className, methodName, "request");
+        String serviceType = getServiceType(method);
+        
+        String requestId = extractEntityId(targetClass, method, args, null, "request", serviceType);
+        Level requestLogLevel = getLogLevel(className, methodName, "request", serviceType);
         String formatRequest = formatArgs(args);
-        String requestMessage = String.format("[%s] 클래스: %s, 메서드: %s, 요청: %s - ID: %s",
+        String requestMessage = String.format("[%s] [%s] 클래스: %s, 메서드: %s, 요청: %s - ID: %s",
+                serviceType,
                 requestLogLevel,
                 className,
                 methodName,
                 formatRequest,
                 requestId
         );
-        logAtLevel(getLogLevel(className, methodName, "request"), requestMessage);
+        logAtLevel(getLogLevel(className, methodName, "request", serviceType), requestMessage);
 
         LogEntity requestLogEntity = new LogEntity(
                 "Request",
@@ -53,8 +53,7 @@ public abstract class AbstractLoggingAspect {
                 LocalDateTime.now(),
                 0L
         );
-        persistLogEntity(requestLogEntity);
-
+        persistLogEntity(requestLogEntity, serviceType);
         Object result;
         try {
             result = joinPoint.proceed();
@@ -62,10 +61,11 @@ public abstract class AbstractLoggingAspect {
             long endTime = System.currentTimeMillis();
             long duration = endTime - startTime;
 
-            String responseId = extractEntityId(targetClass, method, args, result, "response");
-            Level logLevel = getLogLevel(className, methodName, "response");
+            String responseId = extractEntityId(targetClass, method, args, result, "response", serviceType);
+            Level logLevel = getLogLevel(className, methodName, "response", serviceType);
             String formatResponse = formatResult(result);
-            String responseMessage = String.format("[%s] 클래스: %s, 메서드: %s, 응답: %s (실행시간: %dms) - ID: %s",
+            String responseMessage = String.format("[%s] [%s] 클래스: %s, 메서드: %s, 응답: %s (실행시간: %dms) - ID: %s",
+                    serviceType,
                     logLevel,
                     className,
                     methodName,
@@ -73,7 +73,7 @@ public abstract class AbstractLoggingAspect {
                     duration,
                     responseId
             );
-            logAtLevel(getLogLevel(className, methodName, "response"), responseMessage);
+            logAtLevel(getLogLevel(className, methodName, "response", serviceType), responseMessage);
 
             LogEntity responselogEntity = new LogEntity(
                     "Response",
@@ -86,14 +86,15 @@ public abstract class AbstractLoggingAspect {
                     LocalDateTime.now(),
                     duration
             );
-            persistLogEntity(responselogEntity);
+            persistLogEntity(responselogEntity, serviceType);
 
-        } catch (Throwable e) {
+        } catch (Exception e) {
             long endTime = System.currentTimeMillis();
             long duration = endTime - startTime;
 
-            String errorId = extractEntityId(targetClass, method, args, null, "error");
-            String errorMessage = String.format("[ERROR] 클래스: %s, 메서드: %s, Error: %s (실행시간: %dms) - ID: %s",
+            String errorId = extractEntityId(targetClass, method, args, null, "error", serviceType);
+            String errorMessage = String.format("[%s] [ERROR] 클래스: %s, 메서드: %s, Error: %s (실행시간: %dms) - ID: %s",
+                    serviceType,
                     className, methodName, e.getMessage(), duration, errorId);
             logAtLevel(Level.ERROR, errorMessage);
 
@@ -109,18 +110,32 @@ public abstract class AbstractLoggingAspect {
                     duration,
                     errorMessage
             );
-            persistLogEntity(responselogEntity);
+            persistLogEntity(responselogEntity, serviceType);
 
             throw e;
         }
         return result;
     }
 
-    protected abstract String extractEntityId(Class<?> targetClass, Method method, Object[] args, Object result, String logType);
+    private String getServiceType(Method method) {
+        if (method.isAnnotationPresent(UserLogging.class)) {
+            return method.getAnnotation(UserLogging.class).serviceType();
+        } else if (method.isAnnotationPresent(PostLogging.class)) {
+            return method.getAnnotation(PostLogging.class).serviceType();
+        }
+        return "UNKNOWN";
+    }
 
-    protected abstract Level getLogLevel(String className, String methodName, String logType);
+    protected abstract String extractEntityId(Class<?> targetClass, Method method, Object[] args, Object result, String logType, String serviceType);
 
-    protected abstract void persistLogEntity(LogEntity logEntity);
+    protected abstract void persistLogEntity(LogEntity logEntity, String serviceType);
+
+    protected Level getLogLevel(String className, String methodName, String logType, String serviceType) {
+        if ("request".equals(logType) && (methodName.startsWith("get") || methodName.startsWith("find"))) {
+            return Level.DEBUG;
+        }
+        return Level.INFO;
+    };
 
     protected void logAtLevel(Level level, String message) {
         switch (level) {
